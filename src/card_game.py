@@ -14,11 +14,11 @@ class CardGame:
         pass
 
     def deal_cards(self):
-        for player in self.players:
-            player.deal_hand(self.card_deck.dean_n_cards(self.cards_per_player))
+        for player in self.players.values():
+            player.deal_hand(self.card_deck.deal_n_cards(self.cards_per_player))
 
 
-    def deal_n_cards_to_player(self, player: CardPlayer, nCards: int):
+    def deal_n_cards_to_player(self, player_key, nCards: int):
         hand = self.card_deck.deal_n_cards(nCards)
-        player.deal_hand(hand)
+        self.players[player_key].deal_hand(hand)
 

@@ -6,7 +6,7 @@ from cards.default_deck_builder import DeckBuilder
 
 class CardDeck(CardList):
 
-    def __init__(self, deck_format: DeckFormat):
+    def __init__(self, deck_format: DeckFormat = DeckFormat.FIFTY_TWO):
         super().__init__()
         self.deck_format = deck_format
         self.build_deck()

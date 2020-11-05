@@ -19,7 +19,7 @@ class CardList:
 
         return dealt_card
 
-    def dean_n_cards(self, n) -> [PlayingCard]:
+    def deal_n_cards(self, n) -> [PlayingCard]:
         cards_dealt = self._card_list[0:n]
         self._card_list = self._card_list[n:]
         return cards_dealt

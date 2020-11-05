@@ -9,6 +9,11 @@ from cards.card import PlayingCard
 
 class CardListTest(unittest.TestCase):
 
+    def setUp(self):
+        self.list1 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
+            suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
+        self.cardl = CardList(card_list=self.list1)
+
     def test_card_list_constructor(self):
         cardL = CardList()
         self.assertEqual(len(cardL.show_cards()), 0)
@@ -20,111 +25,90 @@ class CardListTest(unittest.TestCase):
         self.assertEqual(cardL.show_cards()[0], expected_list[0])
 
     def test_show_cards(self):
-        list1 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
-            suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
-        cardl = CardList(card_list=list1)
-        size = 3
-        for i in range(3):
-            self.assertEqual(list1[i], cardl.show_cards()[i])
+        size = len(self.list1)
+        for i in range(size):
+            self.assertEqual(self.list1[i], self.cardl.show_cards()[i])
 
     def test_similar(self):
-        list1 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
-            suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
         list2 = [PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(
             suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
 
-        cardl1 = CardList(list1)
         cardl2 = CardList(list2)
 
-        self.assertTrue(cardl1.similar(cardl2))
+        self.assertTrue(self.cardl.similar(cardl2))
 
         list2 = [PlayingCard(suit=Suit.HEARTS, rank=Rank.JACK), PlayingCard(
             suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
         cardl2 = CardList(list2)
-        self.assertFalse(cardl1.similar(cardl2))
+        self.assertFalse(self.cardl.similar(cardl2))
 
     def test_eq(self):
-        list1 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
-            suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
         list2 = [PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(
             suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
 
-        cardl1 = CardList(list1)
         cardl2 = CardList(list2)
 
-        self.assertFalse(cardl1 == cardl2)
+        self.assertFalse(self.cardl == cardl2)
 
         list2 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
             suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
         cardl2 = CardList(list2)
-        self.assertTrue(cardl1 == cardl2)
+        self.assertTrue(self.cardl == cardl2)
 
     def test_size(self):
-        list1 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
-            suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
-        cardl1 = CardList(list1)
         expected = 3
-        result = cardl1.list_size()
+        result = self.cardl.list_size()
 
         self.assertEqual(expected, result)
 
     def test_contains_card(self):
-        list1 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
-            suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
-        cardl1 = CardList(list1)
         card1 = PlayingCard(suit=Suit.SPADES, rank=Rank.TEN)
 
-        self.assertTrue(cardl1.contains_card(card1))
+        self.assertTrue(self.cardl.contains_card(card1))
 
         card1 = PlayingCard(suit=Suit.SPADES, rank=Rank.THREE)
-        self.assertFalse(cardl1.contains_card(card1))
+        self.assertFalse(self.cardl.contains_card(card1))
 
     def test_deal_card(self):
-        list1 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
-            suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
-        cardl1 = CardList(list1)
         expected = PlayingCard(suit=Suit.SPADES, rank=Rank.TEN)
-        result = cardl1.deal_card()
+        result = self.cardl.deal_card()
         self.assertEqual(result, expected)
 
         list2 = [PlayingCard(
             suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
-        self.assertEqual(cardl1.show_cards(), list2)
+        self.assertEqual(self.cardl.show_cards(), list2)
 
     def test_deal_n_cards(self):
-        list1 = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
-            suit=Suit.DIAMONDS, rank=Rank.JACK), PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
-        cardl1 = CardList(list1)
         expected = [PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
             suit=Suit.DIAMONDS, rank=Rank.JACK)]
-        result = cardl1.dean_n_cards(2)
+        result = self.cardl.deal_n_cards(2)
 
         self.assertEqual(result, expected)
 
         list2 = [PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT)]
-        self.assertEqual(cardl1.show_cards(), list2)
+        self.assertEqual(self.cardl.show_cards(), list2)
 
     def test_add_card(self):
-        cardl1 = CardList()
+        cardl = CardList()
         card = PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN)
-        cardl1.add_card(card)
+        cardl.add_card(card)
 
-        self.assertTrue(cardl1.list_size() == 1)
+        self.assertTrue(cardl.list_size() == 1)
 
     def test_add_cards(self):
         card = PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN)
         card2 = PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR)
         card3 = PlayingCard(suit=Suit.CLUBS, rank=Rank.KING)
 
-        cardl1 = CardList()
-        cardl1.add_cards([card, card2])
+        cardl = CardList()
+        cardl.add_cards([card, card2])
         expected = [card, card2]
-        result = cardl1.show_cards()
+        result = cardl.show_cards()
         self.assertEqual(result, expected)
 
-        cardl1 = CardList([card3])
-        cardl1.add_cards([card, card2])
-        result = cardl1.show_cards()
+        cardl = CardList([card3])
+        cardl.add_cards([card, card2])
+        result = cardl.show_cards()
         self.assertNotEqual(result, expected)
         expected = [card3, card, card2]
         self.assertEqual(result, expected)
