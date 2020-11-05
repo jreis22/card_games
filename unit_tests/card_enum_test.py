@@ -4,7 +4,7 @@ sys.path.insert(
     1, '/Users/joao reis/Documents/projects/python_projects/card_games/src/cards')
 from card_enums import Rank, Suit
 
-class CardTest(unittest.TestCase):
+class CardEnumTest(unittest.TestCase):
 
     def test_eq(self):
         obj = Suit.SPADES

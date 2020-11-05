@@ -7,7 +7,7 @@ from card_enums import Rank, Suit
 from card import PlayingCard
 
 
-class CardTest(unittest.TestCase):
+class CardListTest(unittest.TestCase):
 
     def test_card_list_constructor(self):
         cardL = CardList()
