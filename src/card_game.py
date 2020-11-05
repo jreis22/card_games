@@ -5,7 +5,7 @@ from cards.card_enums import DeckFormat
 
 class CardGame:
 
-    def __init__(self, cards_per_player: int, players: dict = None, card_deck: CardDeck = CardDeck(DeckFormat.CINQUENTA_DUAS)):
+    def __init__(self, cards_per_player: int, players: dict = None, card_deck: CardDeck = CardDeck(DeckFormat.FIFTY_TWO)):
         self.players = players
         self.card_deck = card_deck
         self.cards_per_player = cards_per_player
@@ -18,6 +18,7 @@ class CardGame:
             player.deal_hand(self.card_deck.dean_n_cards(self.cards_per_player))
 
 
-    def deal_n_cards_to_player(self, player, nCards: int):
+    def deal_n_cards_to_player(self, player: CardPlayer, nCards: int):
         hand = self.card_deck.deal_n_cards(nCards)
-        return hand
+        player.deal_hand(hand)
+

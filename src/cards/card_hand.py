@@ -1,4 +1,4 @@
-from card_list import CardList
+from cards.card_list import CardList
 
 class CardHand(CardList):
 

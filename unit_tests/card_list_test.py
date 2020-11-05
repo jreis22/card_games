@@ -1,10 +1,10 @@
 import unittest
 import sys
 sys.path.insert(
-    1, '/Users/joao reis/Documents/projects/python_projects/card_games/src/cards')
-from card_list import CardList
-from card_enums import Rank, Suit
-from card import PlayingCard
+    1, '/Users/joao reis/Documents/projects/python_projects/card_games/src/')
+from cards.card_list import CardList
+from cards.card_enums import Rank, Suit
+from cards.card import PlayingCard
 
 
 class CardListTest(unittest.TestCase):

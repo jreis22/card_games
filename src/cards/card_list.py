@@ -1,5 +1,5 @@
 import numpy as np
-from card import PlayingCard
+from cards.card import PlayingCard
 
 
 class CardList:

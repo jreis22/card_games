@@ -1,8 +1,8 @@
 import unittest
 import sys
-sys.path.insert(1, '/Users/joao reis/Documents/projects/python_projects/card_games/src/cards')
-from card import PlayingCard
-from card_enums import Rank, Suit
+sys.path.insert(1, '/Users/joao reis/Documents/projects/python_projects/card_games/src')
+from cards.card import PlayingCard
+from cards.card_enums import Rank, Suit
 
 
 
