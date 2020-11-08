@@ -12,7 +12,7 @@ class PlayingCard(object):
 
     def is_greater(self, other_card, comparator):
         if isinstance(other_card, PlayingCard):
-            return comparator.is_greater(self.rank, other_card.rank)
+            return comparator(self, other_card)
         return False
 
     def __eq__(self, other_card):
