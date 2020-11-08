@@ -60,6 +60,13 @@ class CardList:
         return self._card_list
     # def sort_by_rank(self, sorter):
 
+    def sort_by_rank(self):
+        self._card_list.sort(key=lambda x: x.rank)
+
+    def sort_by_suit(self):
+        self.sort_by_rank()
+        self._card_list.sort(key=lambda x: x.suit)
+
     def __eq__(self, other):
         if isinstance(other, CardList):
             size = self.list_size()

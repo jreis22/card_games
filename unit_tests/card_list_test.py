@@ -126,6 +126,25 @@ class CardListTest(unittest.TestCase):
         expected = [card3, card, card2]
         self.assertEqual(result, expected)
 
+    def test_sort_by_rank(self):
+        expected = [PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT),
+            PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
+            suit=Suit.DIAMONDS, rank=Rank.JACK)]
+        self.cardl.sort_by_rank()
+        self.assertEqual(expected, self.cardl.show_cards())     
+
+    def test_sort_by_suit(self):
+        expected = [PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK), 
+            PlayingCard(suit=Suit.SPADES, rank=Rank.TEN)
+            ]
+        
+        self.cardl.add_card(PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))
+        self.cardl.sort_by_suit()
+        self.assertEqual(expected, self.cardl.show_cards())   
+
+
 
 if __name__ == '__main__':
     unittest.main()
