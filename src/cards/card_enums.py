@@ -23,6 +23,16 @@ class Suit(Enum):
         if isinstance(other, Suit):
             return self.value == other.value
         return False
+    
+    def __gt__(self, other):
+        if isinstance(other, Suit):
+            return self.value > other.value
+        return False
+
+    def __lt__(self, other):
+        if isinstance(other, Suit):
+            return self.value < other.value
+        return False
 
 
 class Rank(Enum):
