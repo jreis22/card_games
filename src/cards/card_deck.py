@@ -9,7 +9,6 @@ class CardDeck(CardList):
     def __init__(self, deck_format: DeckFormat = DeckFormat.FIFTY_TWO):
         super().__init__()
         self.deck_format = deck_format
-        self.build_deck()
 
     def build_deck(self):
         self.add_cards(DeckBuilder.build_deck(self.deck_format))
