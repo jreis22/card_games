@@ -69,6 +69,19 @@ class CardListTest(unittest.TestCase):
         card1 = PlayingCard(suit=Suit.SPADES, rank=Rank.THREE)
         self.assertFalse(self.cardl.contains_card(card1))
 
+    def test_contains_card_of_suit(self):
+        self.assertFalse(self.cardl.contains_card_of_suit(Suit.HEARTS))
+        self.assertTrue(self.cardl.contains_card_of_suit(Suit.CLUBS))
+        self.assertTrue(self.cardl.contains_card_of_suit(Suit.SPADES))
+        self.assertTrue(self.cardl.contains_card_of_suit(Suit.DIAMONDS))
+
+    def test_contains_card_of_rank(self):
+        self.assertFalse(self.cardl.contains_card_of_rank(Rank.ACE))
+        self.assertTrue(self.cardl.contains_card_of_rank(Rank.TEN))
+        self.assertTrue(self.cardl.contains_card_of_rank(Rank.JACK))
+        self.assertTrue(self.cardl.contains_card_of_rank(Rank.EIGHT))
+
+
     def test_deal_card(self):
         expected = PlayingCard(suit=Suit.SPADES, rank=Rank.TEN)
         result = self.cardl.deal_card()

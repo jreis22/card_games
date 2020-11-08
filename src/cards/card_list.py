@@ -1,5 +1,6 @@
 import numpy as np
 from cards.card import PlayingCard
+from cards.card_enums import Rank, Suit
 
 
 class CardList:
@@ -28,8 +29,26 @@ class CardList:
         self._card_list.append(card)
         return True
 
+    def remove_card(self, card: PlayingCard) -> bool:
+        if(self._card_list.__contains__(card)):
+            self._card_list.remove(card)
+            return True
+        return False
+
     def contains_card(self, card: PlayingCard) -> bool:
         return self._card_list.__contains__(card)
+
+    def contains_card_of_suit(self, suit: Suit) -> bool:
+        for card in self._card_list:
+            if card.suit == suit:
+                return True
+        return False
+
+    def contains_card_of_rank(self, rank: Rank) -> bool:
+        for card in self._card_list:
+            if card.rank == rank:
+                return True
+        return False
 
     def add_cards(self, cards: [PlayingCard]):
         self._card_list = self._card_list + cards
