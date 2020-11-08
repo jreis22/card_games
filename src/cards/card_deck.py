@@ -10,7 +10,6 @@ class CardDeck(CardList):
         super().__init__()
         self.deck_format = deck_format
         self.build_deck()
-        self.shuffle()
 
     def build_deck(self):
         self.add_cards(DeckBuilder.build_deck(self.deck_format))
