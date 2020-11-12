@@ -31,6 +31,8 @@ class CardEnumTest(unittest.TestCase):
         obj2 = Rank.EIGHT
         self.assertTrue(obj1 != obj2)
 
+        self.assertTrue(obj1 < obj2)
+
 
 if __name__ == '__main__':
     unittest.main()

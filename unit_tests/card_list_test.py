@@ -2,9 +2,9 @@ import unittest
 import sys
 sys.path.insert(
     1, '/Users/joao reis/Documents/projects/python_projects/card_games/src/')
-from cards.card_list import CardList
-from cards.card_enums import Rank, Suit
 from cards.card import PlayingCard
+from cards.card_enums import Rank, Suit
+from cards.card_list import CardList
 
 
 class CardListTest(unittest.TestCase):
@@ -81,7 +81,6 @@ class CardListTest(unittest.TestCase):
         self.assertTrue(self.cardl.contains_card_of_rank(Rank.JACK))
         self.assertTrue(self.cardl.contains_card_of_rank(Rank.EIGHT))
 
-
     def test_deal_card(self):
         expected = PlayingCard(suit=Suit.SPADES, rank=Rank.TEN)
         result = self.cardl.deal_card()
@@ -127,23 +126,25 @@ class CardListTest(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_sort_by_rank(self):
-        expected = [PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT),
-            PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
+        expected_list = [PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT),
+                         PlayingCard(suit=Suit.SPADES, rank=Rank.TEN), PlayingCard(
             suit=Suit.DIAMONDS, rank=Rank.JACK)]
+        expected = CardList(expected_list)
         self.cardl.sort_by_rank()
-        self.assertEqual(expected, self.cardl.show_cards())     
+        self.assertEqual(expected, self.cardl)
 
     def test_sort_by_suit(self):
-        expected = [PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT),
+        expected_list = [
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO),
-            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK), 
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK),
+            PlayingCard(suit=Suit.CLUBS, rank=Rank.EIGHT),
             PlayingCard(suit=Suit.SPADES, rank=Rank.TEN)
-            ]
-        
+        ]
+        expected = CardList(expected_list)
+
         self.cardl.add_card(PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))
         self.cardl.sort_by_suit()
-        self.assertEqual(expected, self.cardl.show_cards())   
-
+        self.assertTrue(expected == self.cardl)
 
 
 if __name__ == '__main__':
