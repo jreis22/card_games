@@ -6,10 +6,13 @@ from cards.card_enums import Rank, Suit
 class CardList:
 
     def __init__(self, card_list: [PlayingCard] = None):
-        if card_list is None:
+        self.set_card_list(card_list)
+
+    def set_card_list(self, new_card_list: [PlayingCard]):
+        if new_card_list is None:
             self._card_list = []
         else:
-            self._card_list = card_list
+            self._card_list = new_card_list
 
     def shuffle(self):
         np.random.shuffle(self._card_list)
