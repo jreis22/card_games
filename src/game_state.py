@@ -3,8 +3,9 @@ from enum import Enum
 
 
 class GameStateEnum(Enum):
-    DEAL_CARDS = 0
-    PREP_PHASE = 1
+    CREATED = 0
+    DEAL_CARDS = 10
+    STARTED = 1
     ROUND_START = 2
     ROUND_END = 3
     BETTING_ROUND = 9
