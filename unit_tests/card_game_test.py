@@ -2,14 +2,15 @@ import unittest
 import sys
 sys.path.insert(
     1, '/Users/joao reis/Documents/projects/python_projects/card_games/src')
-from cards.card_deck import CardDeck
-from cards.card import PlayingCard
-from cards.card_enums import Rank, Suit, DeckFormat
-from cards.card_hand import CardHand
-from player import CardPlayer
 from card_game import CardGame
+from player import CardPlayer
+from cards.card_hand import CardHand
+from cards.card_enums import Rank, Suit, DeckFormat
+from cards.card import PlayingCard
+from cards.card_deck import CardDeck
 
-class CardPlayerTest(unittest.TestCase):
+
+class CardGameTest(unittest.TestCase):
 
     def setUp(self):
         players_dict = {1: CardPlayer(card_hand=CardHand()),
@@ -20,12 +21,32 @@ class CardPlayerTest(unittest.TestCase):
 
         self.game = CardGame(cards_per_player=7, players=players_dict,
                              player_order=player_order, card_deck=CardDeck(DeckFormat.FIFTY_TWO))
+        self.game.card_deck.build_deck()
 
     def test_CardGame_constructor(self):
         self.assertTrue(self.game.cards_per_player == 7)
         self.assertTrue(len(self.game.players) == 4)
         self.assertTrue(self.game.card_deck.list_size() == 52)
 
+    def test_get_player_cards(self):
+        try:
+            self.game.get_player_cards(0)
+        except Exception:
+            pass
+        else:
+            self.fail(
+                "game.getplayercards out of index did not raise expected error")
+
+        self.assertEqual([], self.game.get_player_cards(1))
+        expected = [
+            PlayingCard(suit=Suit.CLUBS, rank=Rank.ACE),
+            PlayingCard(suit=Suit.SPADES, rank=Rank.FIVE)
+        ]
+        self.game.players[1].set_card_hand(CardHand(expected))
+        unexpected = [PlayingCard(suit=Suit.CLUBS, rank=Rank.ACE), PlayingCard(suit=Suit.SPADES, rank=Rank.ACE)]
+        self.assertEqual(self.game.get_player_cards(1), expected)
+        self.assertNotEqual(self.game.get_player_cards(1), unexpected)
+        
     def test_deal_cards(self):
         self.game.deal_cards()
 
@@ -64,7 +85,7 @@ class CardPlayerTest(unittest.TestCase):
         expected = [3, 4, 1, 2]
         self.assertEqual(self.game.player_order, expected)
 
-        self.game.inverse_rotate_player_order_n_times(3)        
+        self.game.inverse_rotate_player_order_n_times(3)
         expected = [4, 1, 2, 3]
         self.assertEqual(self.game.player_order, expected)
         self.game.inverse_rotate_player_order_n_times(1)
@@ -73,7 +94,38 @@ class CardPlayerTest(unittest.TestCase):
 
         self.game.rotate_player_order_n_times(4)
         self.assertEqual(self.game.player_order, expected)
-        
 
+    def test_start_game(self):
+        self.game.card_deck = CardDeck(DeckFormat.FIFTY_TWO)
+        self.game.start_game()
+        self.assertTrue(
+            self.game.players[1].number_of_cards_left() == self.game.cards_per_player)
+        self.assertTrue(self.game.card_deck.list_size() == 52 - (7 * 4))
+        self.assertFalse(
+            self.game.players[1].card_hand == self.game.players[2].card_hand)
+
+    def test_add_played_card(self):
+        self.game.add_played_card(1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))
+        self.game.add_played_card(2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))
+        self.game.add_played_card(1, PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN))
+        self.game.add_played_card(2, PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK))
+
+        self.assertTrue(self.game.played_cards.__contains__((1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))))
+        self.assertTrue(self.game.played_cards.__contains__((1, PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN))))
+        self.assertTrue(self.game.played_cards.__contains__((2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))))
+        self.assertFalse(self.game.played_cards.__contains__((2, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))))
+
+    def test_set_all_players_playing(self):
+        for player in self.game.players.values():
+            player.pass_turn()
+
+        self.game.set_all_players_playing()
+        count = 0
+        for player in self.game.players.values():
+            self.assertTrue(player.is_playing())
+            count+=1
+
+        self.assertTrue(count == 4)
+        
 if __name__ == '__main__':
     unittest.main()
