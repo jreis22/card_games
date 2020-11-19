@@ -8,6 +8,7 @@ from cards.card_hand import CardHand
 from cards.card_enums import Rank, Suit, DeckFormat
 from cards.card import PlayingCard
 from cards.card_deck import CardDeck
+from card_games.played_card import PlayedCard
 
 
 class CardGameTest(unittest.TestCase):
@@ -105,15 +106,15 @@ class CardGameTest(unittest.TestCase):
             self.game.players[1].card_hand == self.game.players[2].card_hand)
 
     def test_add_played_card(self):
-        self.game.add_played_card(1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))
-        self.game.add_played_card(2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))
-        self.game.add_played_card(1, PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN))
-        self.game.add_played_card(2, PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK))
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1)
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN), round=2)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK), round=2)
 
-        self.assertTrue(self.game.played_cards.__contains__((1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))))
-        self.assertTrue(self.game.played_cards.__contains__((1, PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN))))
-        self.assertTrue(self.game.played_cards.__contains__((2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))))
-        self.assertFalse(self.game.played_cards.__contains__((2, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))))
+        self.assertTrue(self.game.played_cards.__contains__(PlayedCard(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1)))
+        self.assertTrue(self.game.played_cards.__contains__(PlayedCard(player_key=1, card=PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN), round=2)))
+        self.assertTrue(self.game.played_cards.__contains__(PlayedCard(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1)))
+        self.assertFalse(self.game.played_cards.__contains__(PlayedCard(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=2)))
 
     def test_set_all_players_playing(self):
         for player in self.game.players.values():
@@ -126,6 +127,19 @@ class CardGameTest(unittest.TestCase):
             count+=1
 
         self.assertTrue(count == 4)
+
+    def test_get_plays_from_round(self):
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1)
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN), round=2)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK), round=2)
+
+        result = self.game.get_plays_from_round(1)
+        expected = [
+            PlayedCard(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1),
+            PlayedCard(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1),
+        ]
+        self.assertEqual(result, expected)
         
 if __name__ == '__main__':
     unittest.main()

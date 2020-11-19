@@ -26,13 +26,11 @@ class Bisca(CardGame):
         if len(players) != 2:
             raise Exception("Must have 2 players to start game")
 
-        super().__init__(cards_per_player=7, card_deck=card_deck, players=players, game_state=game_state,
-                         player_order=player_order, played_cards=played_cards
-                         )
+        super().__init__(cards_per_player=7, card_deck=card_deck, current_round=current_round, players=players, game_state=game_state,
+                         player_order=player_order, played_cards=played_cards)
 
         self.current_suit = current_suit
         self.trump_suit = trump_suit
-        self.current_round = current_round
 
     # override
    # def start_game(self):
@@ -62,7 +60,7 @@ class Bisca(CardGame):
                     f"Player {player_key} must play card of current round suit {self.current_suit}")
 
         player.play_card(card)
-        self.add_played_card(player_key=player_key, card=card)
+        self.add_played_card(player_key=player_key, card=card, round=self.current_round)
         player.pass_turn()
         self.rotate_player_order()
         if self.end_round():
@@ -97,35 +95,23 @@ class Bisca(CardGame):
     def get_round_winner(self, current_round):
         plays = self.get_plays_from_round(current_round)
         best_play = plays[0]
-        round_suit = best_play[Bisca.COLUMN_CARD].suit
+        round_suit = best_play.card.suit
         for play in plays[1:]:
-            card1 = best_play[Bisca.COLUMN_CARD]
-            card2 = play[Bisca.COLUMN_CARD]
+            card1 = best_play.card
+            card2 = play.card
             if self.compare_cards(card1=card1, card2=card2, round_suit=round_suit) == card2:
                 best_play = play
 
-        return best_play[Bisca.COLUMN_PLAYER_KEY]
+        return best_play.player_key
 
     def get_round_points(self, current_round) -> int:
         plays = self.get_plays_from_round(current_round)
         points = 0
         for play in plays:
-            if Bisca.point_dict.keys().__contains__(play[Bisca.COLUMN_CARD].rank.value):
-                points += Bisca.point_dict[play[Bisca.COLUMN_CARD].rank.value]
+            if self.point_dict.keys().__contains__(play.card.rank.value):
+                points += self.point_dict[play.card.rank.value]
 
         return points
-
-    def get_plays_from_round(self, current_round: int):
-        nPlayers = len(self.players)
-        starting_index = nPlayers * (current_round - 1)
-        ending_index = starting_index + nPlayers
-        cards_played_len = len(self.played_cards)
-        if ending_index > cards_played_len:
-            ending_index = cards_played_len
-        if starting_index >= cards_played_len:
-            raise Exception(f"Round wasn't reached yet")
-        plays_from_round = self.played_cards[starting_index:ending_index]
-        return plays_from_round
 
     def compare_cards(self, card1: PlayingCard, card2: PlayingCard, round_suit: Suit) -> PlayingCard:
         if card1.suit == card2.suit:

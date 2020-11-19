@@ -9,9 +9,10 @@ from cards.card_hand import CardHand
 from player import CardPlayer
 from cards.card_deck import CardDeck
 from card_games.game_state import GameStateEnum
+from card_games.played_card import PlayedCard
 
 
-class CardEnumTest(unittest.TestCase):
+class BiscaTest(unittest.TestCase):
 
     def setUp(self):
         players_dict = [CardPlayer(1),
@@ -122,58 +123,61 @@ class CardEnumTest(unittest.TestCase):
                 self.assertTrue(result == card2)
 
     def test_get_plays_from_round(self):
-        self.game.add_played_card(1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))
-        self.game.add_played_card(2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))
-        self.game.add_played_card(1, PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN))
-        self.game.add_played_card(2, PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK))
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1)
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN), round=2)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK), round=2)
 
         result = self.game.get_plays_from_round(1)
         expected = [
-            (1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR)),
-            (2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO)),
+            PlayedCard(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1),
+            PlayedCard(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1),
         ]
         self.assertEqual(result, expected)
 
     def test_get_round_points(self):
-        self.game.add_played_card(1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))
-        self.game.add_played_card(2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))
-        self.game.add_played_card(1, PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN))
-        self.game.add_played_card(2, PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK))
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1)
+        
+        #necessary to add extra cards
+        self.game.current_round = 2
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN), round=2)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK), round=2)
         
 
         result = self.game.get_round_points(1)
         expected = 0
         # print(f"{Bisca.point_dict[Rank.JACK.value]}")
         self.assertEqual(result, expected)
-        
+
         result = self.game.get_round_points(2)
         expected = 5
-        self.assertEqual(result, expected)
-
-    def test_get_round_winner(self):
-        self.game.add_played_card(1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))
-        self.game.add_played_card(2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))
-        self.game.add_played_card(1, PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN))
-        self.game.add_played_card(2, PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK))
-        
-
-        result = self.game.get_round_winner(1)
-        expected = 2
         # print(f"{Bisca.point_dict[Rank.JACK.value]}")
         self.assertEqual(result, expected)
 
-        result = self.game.get_round_winner(2)
+    def test_get_round_winner(self):
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1)
+        self.game.current_round=2
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.SPADES, rank=Rank.QUEEN), round=2)
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.CLUBS, rank=Rank.JACK), round=2)
+        
 
-        #player order wasnt changed so player 1 was still the 1st playing and setting the suit
-        expected = 1
+        result = self.game.get_round_winner(1)
+        #because its trump suit
+        expected = 2
+        # print(f"{Bisca.point_dict[Rank.JACK.value]}")
         self.assertEqual(result, expected)
+        self.assertEqual(len(self.game.get_plays_from_round(1)), 2)
+        #player 1 winds because of round suit
+        self.assertEqual(self.game.get_round_winner(2), 1)
     
     def test_end_round(self):
-        self.game.add_played_card(1, PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR))
+        self.game.add_played_card(player_key=1, card=PlayingCard(suit=Suit.HEARTS, rank=Rank.FOUR), round=1)
         
         self.assertFalse(self.game.end_round())
 
-        self.game.add_played_card(2, PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO))
+        self.game.add_played_card(player_key=2, card=PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO), round=1)
         #falso pois ha jogadores a jogar
         self.assertFalse(self.game.end_round())
         self.game.players[1].pass_turn()

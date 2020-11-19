@@ -4,12 +4,13 @@ from cards.card_deck import CardDeck
 from cards.card_enums import DeckFormat
 from card_games.game_state import GameStateMachine, GameStateEnum
 from cards.card import PlayingCard
+from card_games.played_card import PlayedCard
 
 
 class CardGame(GameStateMachine):
 
     # rounds are
-    def __init__(self, cards_per_player: int, game_id:uuid.UUID=None, players: [] = None,
+    def __init__(self, cards_per_player: int, current_round: int = 1, game_id: uuid.UUID = None, players: [] = None,
                  card_deck: CardDeck = None,
                  game_state: GameStateEnum = GameStateEnum.CREATED,
                  player_order: [] = None, played_cards: [] = None):
@@ -20,8 +21,10 @@ class CardGame(GameStateMachine):
         self.set_player_order(player_order)
         self.set_played_cards(played_cards)
         self._set_id_(game_id)
+        self.current_round = current_round
 
-    # setters
+    # setters & getters
+    
     def _set_id_(self, game_id):
         if game_id is None:
             self.game_id = uuid.uuid1()
@@ -30,7 +33,7 @@ class CardGame(GameStateMachine):
 
     def get_id(self) -> uuid.UUID:
         return self.game_id
-        
+
     def set_players(self, players: []):
         self.players = {}
         if not players is None:
@@ -60,8 +63,20 @@ class CardGame(GameStateMachine):
         else:
             self.played_cards = played_cards
 
-    def add_played_card(self, player_key, card: PlayingCard):
-        self.played_cards.append((player_key, card))
+    def add_played_card(self, player_key, card: PlayingCard, round: int):
+        self.played_cards.append(PlayedCard(
+            player_key=player_key, card=card, round=round))
+
+    def get_plays_from_round(self, current_round: int):
+        if self.current_round < current_round:
+            raise Exception(f"Round wasn't reached yet")
+        
+        plays_from_round = []
+        for played_card in self.played_cards:
+            if played_card.round == current_round:
+                plays_from_round.append(played_card)
+
+        return plays_from_round
 
     def get_player_cards(self, player_key):
         if not self.players.__contains__(player_key):
