@@ -9,7 +9,7 @@ from cards.card import PlayingCard
 class CardGame(GameStateMachine):
 
     # rounds are
-    def __init__(self, cards_per_player: int, game_id:uuid.UUID=None, players: dict = None,
+    def __init__(self, cards_per_player: int, game_id:uuid.UUID=None, players: [] = None,
                  card_deck: CardDeck = None,
                  game_state: GameStateEnum = GameStateEnum.CREATED,
                  player_order: [] = None, played_cards: [] = None):
@@ -31,11 +31,11 @@ class CardGame(GameStateMachine):
     def get_id(self) -> uuid.UUID:
         return self.game_id
         
-    def set_players(self, players: dict):
-        if players is None:
-            self.players = {}
-        else:
-            self.players = players
+    def set_players(self, players: []):
+        self.players = {}
+        if not players is None:
+            for player in players:
+                self.players[player.player_id] = player
 
     def set_all_players_playing(self):
         for player in self.players.values():

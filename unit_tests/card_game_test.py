@@ -2,7 +2,7 @@ import unittest
 import sys
 sys.path.insert(
     1, '/Users/joao reis/Documents/projects/python_projects/card_games/src')
-from card_game import CardGame
+from card_games.card_game import CardGame
 from player import CardPlayer
 from cards.card_hand import CardHand
 from cards.card_enums import Rank, Suit, DeckFormat
@@ -13,10 +13,10 @@ from cards.card_deck import CardDeck
 class CardGameTest(unittest.TestCase):
 
     def setUp(self):
-        players_dict = {1: CardPlayer(card_hand=CardHand()),
-                        2: CardPlayer(card_hand=CardHand()),
-                        3: CardPlayer(card_hand=CardHand()),
-                        4: CardPlayer(card_hand=CardHand())}
+        players_dict = [CardPlayer(1),
+                        CardPlayer(2),
+                        CardPlayer(3),
+                        CardPlayer(4)]
         player_order = [1, 2, 3, 4]
 
         self.game = CardGame(cards_per_player=7, players=players_dict,

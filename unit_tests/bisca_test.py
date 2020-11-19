@@ -14,8 +14,8 @@ from card_games.game_state import GameStateEnum
 class CardEnumTest(unittest.TestCase):
 
     def setUp(self):
-        players_dict = {1: CardPlayer(),
-                        2: CardPlayer()}
+        players_dict = [CardPlayer(1),
+                        CardPlayer(2)]
         player_order = [1, 2]
 
         self.game = Bisca(players=players_dict,

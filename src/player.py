@@ -7,8 +7,8 @@ from cards.card_enums import Rank, Suit
 
 
 class CardPlayer:
-    def __init__(self, card_hand: CardHand = None, player_state: PlayerStateEnum = PlayerStateEnum.PLAYING, points: int = 0):
-        super().__init__()
+    def __init__(self, player_id, card_hand: CardHand = None, player_state: PlayerStateEnum = PlayerStateEnum.PLAYING, points: int = 0):
+        self.player_id = player_id
         self.set_card_hand(card_hand)
         self.player_state = player_state
         self.points = points
@@ -68,3 +68,8 @@ class CardPlayer:
 
     def pass_turn(self):
         self.player_state = PlayerStateEnum.PASS
+
+    def __eq__(self, other):
+        if isinstance(other, CardPlayer):
+            return self.player_id == other.player_id
+        return False
