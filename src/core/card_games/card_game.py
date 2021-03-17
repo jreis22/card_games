@@ -1,13 +1,13 @@
 import uuid
-from player import CardPlayer
-from cards.card_deck import CardDeck
-from cards.card_enums import DeckFormat
-from card_games.game_state import GameStateMachine, GameStateEnum
-from cards.card import PlayingCard
-from card_games.played_card import PlayedCard
+from core.player import CardPlayer
+from core.cards.card_deck import CardDeck
+from core.cards.card_enums import DeckFormat
+from core.card_games.game_state import GameStateEnum
+from core.cards.card import PlayingCard
+from core.card_games.played_card import PlayedCard
 
 
-class CardGame(GameStateMachine):
+class CardGame():
 
     # rounds are
     def __init__(self, cards_per_player: int, current_round: int = 1, game_id: uuid.UUID = None, players: [] = None,
@@ -29,7 +29,7 @@ class CardGame(GameStateMachine):
         if game_id is None:
             self.game_id = uuid.uuid1()
         else:
-            self.game_id == game_id
+            self.game_id = game_id
 
     def get_id(self) -> uuid.UUID:
         return self.game_id
@@ -47,9 +47,13 @@ class CardGame(GameStateMachine):
     # different games might implement different decks
     def set_card_deck(self, card_deck: CardDeck):
         if card_deck is None:
-            self.card_deck = CardDeck(DeckFormat.FIFTY_TWO)
+            self.card_deck = CardDeck(self.get_deck_format())
         else:
             self.card_deck = card_deck
+
+    #the default deck for the game being played (override if a different deck is used)
+    def get_deck_format(self) -> DeckFormat:
+        return DeckFormat.FIFTY_TWO
 
     def set_player_order(self, player_order: []):
         if player_order is None:

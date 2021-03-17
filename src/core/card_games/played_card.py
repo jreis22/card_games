@@ -1,4 +1,4 @@
-from cards.card import PlayingCard
+from core.cards.card import PlayingCard
 
 
 class PlayedCard:

@@ -2,13 +2,13 @@ import unittest
 import sys
 sys.path.insert(
     1, '/Users/joao reis/Documents/projects/python_projects/card_games/src')
-from card_games.card_game import CardGame
-from player import CardPlayer
-from cards.card_hand import CardHand
-from cards.card_enums import Rank, Suit, DeckFormat
-from cards.card import PlayingCard
-from cards.card_deck import CardDeck
-from card_games.played_card import PlayedCard
+from core.card_games.card_game import CardGame
+from core.player import CardPlayer
+from core.cards.card_hand import CardHand
+from core.cards.card_enums import Rank, Suit, DeckFormat
+from core.cards.card import PlayingCard
+from core.cards.card_deck import CardDeck
+from core.card_games.played_card import PlayedCard
 
 
 class CardGameTest(unittest.TestCase):

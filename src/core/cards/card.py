@@ -1,4 +1,4 @@
-from cards.card_enums import Suit, Rank
+from core.cards.card_enums import Suit, Rank
 
 class PlayingCard(object):
     def __init__(self, suit: Suit, rank: Rank):

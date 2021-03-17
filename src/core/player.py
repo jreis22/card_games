@@ -1,7 +1,7 @@
-from cards.card_hand import CardHand
-from player_state import PlayerStateEnum
-from cards.card import PlayingCard
-from cards.card_enums import Rank, Suit
+from core.cards.card_hand import CardHand
+from core.player_state import PlayerStateEnum
+from core.cards.card import PlayingCard
+from core.cards.card_enums import Rank, Suit
 
 # player that participates in a card game
 

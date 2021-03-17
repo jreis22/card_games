@@ -1,7 +1,7 @@
 
-from cards.card_list import CardList
-from cards.card_enums import DeckFormat
-from cards.default_deck_builder import DeckBuilder
+from core.cards.card_list import CardList
+from core.cards.card_enums import DeckFormat
+from core.cards.default_deck_builder import DeckBuilder
 
 
 class CardDeck(CardList):

@@ -1,5 +1,5 @@
-from cards.card_list import CardList
-from cards.card import PlayingCard
+from core.cards.card_list import CardList
+from core.cards.card import PlayingCard
 
 class CardHand(CardList):
 

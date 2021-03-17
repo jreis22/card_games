@@ -2,7 +2,7 @@ import unittest
 import sys
 sys.path.insert(
     1, '/Users/joao reis/Documents/projects/python_projects/card_games/src')
-from cards.card_enums import Rank, Suit
+from core.cards.card_enums import Rank, Suit
 
 class CardEnumTest(unittest.TestCase):
 

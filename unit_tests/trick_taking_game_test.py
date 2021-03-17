@@ -3,7 +3,7 @@ import sys
 sys.path.insert(
     1, '/Users/joao reis/Documents/projects/python_projects/card_games/src')
 from core.cards.card_enums import Rank, Suit, DeckFormat
-from core.card_games.bisca import Bisca
+from core.card_games.trick_taking_game import TrickTakingGame
 from core.cards.card import PlayingCard
 from core.cards.card_hand import CardHand
 from core.player import CardPlayer
@@ -12,14 +12,14 @@ from core.card_games.game_state import GameStateEnum
 from core.card_games.played_card import PlayedCard
 
 
-class BiscaTest(unittest.TestCase):
+class TrickTakingGameTest(unittest.TestCase):
 
     def setUp(self):
         players_dict = [CardPlayer(1),
                         CardPlayer(2)]
         player_order = [1, 2]
 
-        self.game = Bisca(players=players_dict,
+        self.game = TrickTakingGame(cards_per_player= 7, players=players_dict,
                           player_order=player_order,
                           current_suit=Suit.JOKER, trump_suit=Suit.DIAMONDS, current_round=1)
         self.game.card_deck.build_deck()
@@ -33,44 +33,44 @@ class BiscaTest(unittest.TestCase):
         self.game.current_suit = Suit.HEARTS
 
     def test_constructor(self):
-        self.assertTrue(len(self.game.players) == 2)
-        self.assertTrue(self.game.card_deck.deck_format == DeckFormat.FORTY)
-        self.assertTrue(self.game.card_deck.list_size() == 26)
+        self.assertEqual(len(self.game.players), 2)
+        self.assertEqual(self.game.card_deck.deck_format, DeckFormat.FIFTY_TWO)
+        self.assertEqual(self.game.card_deck.list_size(), 38)
 
         expected_player_1_cards = [
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.ACE),
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.THREE),
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.FIVE),
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.SEVEN),
-            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.QUEEN),
-            PlayingCard(suit=Suit.CLUBS, rank=Rank.ACE),
-            PlayingCard(suit=Suit.CLUBS, rank=Rank.THREE)
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.NINE),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.KING)
         ]
         expected_player1_hand = CardHand(expected_player_1_cards)
-        self.assertTrue(
-            self.game.players[1].card_hand == expected_player1_hand)
+        self.assertEqual(
+            self.game.players[1].card_hand, expected_player1_hand)
 
         expected_player_1_cards = [
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO),
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.FOUR),
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.SIX),
-            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK),
-            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.KING),
-            PlayingCard(suit=Suit.CLUBS, rank=Rank.TWO),
-            PlayingCard(suit=Suit.CLUBS, rank=Rank.FOUR)
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.EIGHT),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TEN),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.QUEEN),
+            PlayingCard(suit=Suit.CLUBS, rank=Rank.ACE)
         ]
         expected_player1_hand = CardHand(expected_player_1_cards)
-        self.assertTrue(
-            self.game.players[2].card_hand == expected_player1_hand)
+        self.assertEqual(
+            self.game.players[2].card_hand, expected_player1_hand)
 
     def test_rank_comparison(self):
         cards = [
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.TWO),
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.FOUR),
-            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.QUEEN),
-            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK),
-            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.KING),
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.SEVEN),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.JACK),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.QUEEN),
+            PlayingCard(suit=Suit.DIAMONDS, rank=Rank.KING),
             PlayingCard(suit=Suit.DIAMONDS, rank=Rank.ACE)
         ]
 
@@ -147,12 +147,10 @@ class BiscaTest(unittest.TestCase):
 
         result = self.game.get_round_points(1)
         expected = 0
-        # print(f"{Bisca.point_dict[Rank.JACK.value]}")
         self.assertEqual(result, expected)
 
         result = self.game.get_round_points(2)
         expected = 5
-        # print(f"{Bisca.point_dict[Rank.JACK.value]}")
         self.assertEqual(result, expected)
 
     def test_get_round_winner(self):
@@ -166,7 +164,6 @@ class BiscaTest(unittest.TestCase):
         result = self.game.get_round_winner(1)
         #because its trump suit
         expected = 2
-        # print(f"{Bisca.point_dict[Rank.JACK.value]}")
         self.assertEqual(result, expected)
         self.assertEqual(len(self.game.get_plays_from_round(1)), 2)
         #player 1 winds because of round suit
@@ -184,7 +181,7 @@ class BiscaTest(unittest.TestCase):
         self.game.players[2].pass_turn()
         self.assertEqual(self.game.players[1].number_of_cards_left(), 7)
         self.assertEqual(self.game.players[2].number_of_cards_left(), 7)
-        self.assertEqual(self.game.card_deck.list_size(), 26)
+        self.assertEqual(self.game.card_deck.list_size(), 38)
         self.assertTrue(self.game.end_round())
         self.assertTrue(self.game.current_round == 2)
         
@@ -192,7 +189,7 @@ class BiscaTest(unittest.TestCase):
             self.assertTrue(player.is_playing())
             self.assertEqual(player.number_of_cards_left(), 8)
         
-        self.assertEqual(self.game.card_deck.list_size(), 24)
+        self.assertEqual(self.game.card_deck.list_size(), 36)
         self.assertTrue(self.game.current_suit == Suit.JOKER)
 
     def test_play_card(self):

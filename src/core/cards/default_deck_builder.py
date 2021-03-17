@@ -1,5 +1,5 @@
-from cards.card_enums import DeckFormat, Rank, Suit
-from cards.card import PlayingCard
+from core.cards.card_enums import DeckFormat, Rank, Suit
+from core.cards.card import PlayingCard
 
 
 class DeckBuilder:

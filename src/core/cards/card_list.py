@@ -1,6 +1,6 @@
 import numpy as np
-from cards.card import PlayingCard
-from cards.card_enums import Rank, Suit
+from core.cards.card import PlayingCard
+from core.cards.card_enums import Rank, Suit
 
 
 class CardList:
