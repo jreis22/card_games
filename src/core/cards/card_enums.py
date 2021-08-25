@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class DeckFormat(Enum):
     FORTY = 40
     FIFTY_TWO = 52
@@ -18,6 +17,10 @@ class Suit(Enum):
     @staticmethod
     def get_all():
         return [Suit.HEARTS, Suit.CLUBS, Suit.DIAMONDS, Suit.SPADES]
+
+    @staticmethod
+    def get_suit_from_string(string: str):
+        return Suit[string.upper()]
 
     def __eq__(self, other):
         if isinstance(other, Suit):
@@ -52,6 +55,10 @@ class Rank(Enum):
     KING = 13
     JOKER = 100
 
+    @staticmethod
+    def get_all() -> list:
+        return [Rank.ACE, Rank.TWO, Rank.THREE, Rank.FOUR, Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT, Rank.NINE, Rank.TEN, Rank.JACK, Rank.QUEEN, Rank.KING]
+
     def __eq__(self, other):
         if isinstance(other, Rank):
             return self.value == other.value
@@ -68,9 +75,9 @@ class Rank(Enum):
         return False
 
     @staticmethod
-    def get_pip_ranks():
+    def get_pip_ranks() -> list:
         return [Rank.ACE, Rank.TWO, Rank.THREE, Rank.FOUR, Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT, Rank.NINE, Rank.TEN]
 
     @staticmethod
-    def get_court_ranks():
+    def get_court_ranks() -> list:
         return [Rank.JACK, Rank.QUEEN, Rank.KING]
